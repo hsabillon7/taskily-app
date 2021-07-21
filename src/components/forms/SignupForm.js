@@ -55,7 +55,7 @@ function SignupForm() {
   return (
     <View>
       {error && <Text>{error}</Text>}
-      {state.errorMessage && <Text>{state.errorMessage}</Text>}
+      {state.errorMessage != null && <Text>{state.errorMessage}</Text>}
       <TextInput
         mode="outlined"
         label="Fullname"
