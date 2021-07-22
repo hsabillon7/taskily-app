@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Caption, Text, TextInput } from "react-native-paper";
 import { Context as AuthContext } from "../../providers/AuthContext";
 import { validate } from "email-validator";
 
-function SignupForm() {
+function SignupForm({ navigation }) {
   const { state, signup } = useContext(AuthContext);
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +15,11 @@ function SignupForm() {
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [error, setError] = useState(false);
+
+  // Verificar si el usuario se registra en la app
+  useEffect(() => {
+    if (state.registered) navigation.navigate("Home");
+  }, [state.registered]);
 
   function handleVerify(input) {
     if (input === "fullname") {

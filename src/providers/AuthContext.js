@@ -23,6 +23,13 @@ const authReducer = (state, action) => {
         ...state,
         user: action.payload.user,
         loggedIn: action.payload.loggedIn,
+        loading: action.payload.loading,
+      };
+    case "signout":
+      return {
+        ...state,
+        user: action.payload.user,
+        loggedIn: action.payload.loggedIn,
       };
     default:
       return state;
@@ -116,7 +123,7 @@ const persistLogin = (dispatch) => () => {
         .then((response) => {
           dispatch({
             type: "persistLogin",
-            payload: { user: response.data(), loggedIn: true },
+            payload: { user: response.data(), loggedIn: true, loading: false },
           });
         })
         .catch((error) => {
@@ -132,6 +139,19 @@ const persistLogin = (dispatch) => () => {
   });
 };
 
+const signout = (dispatch) => () => {
+  // Cerrar la sesión del usuario. Esto elimina el token.
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      dispatch({ type: "signout", payload: { user: {}, loggedIn: false } });
+    })
+    .catch((error) => {
+      dispatch({ type: "errorMessage", payload: error.message });
+    });
+};
+
 // Exportar las funcionalidades del contexto
 export const { Provider, Context } = createDataContext(
   authReducer,
@@ -139,11 +159,13 @@ export const { Provider, Context } = createDataContext(
     signup,
     signin,
     persistLogin,
+    signout,
   },
   {
     user: {},
     errorMessage: null,
     registered: false,
     loggedIn: false,
+    loading: true,
   }
 );
