@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import Signin from "../screens/Signin";
 import Signup from "../screens/Signup";
 import Home from "../screens/Home";
+import CreateProject from "../screens/CreateProject";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ function Navigation() {
           {state.loggedIn ? (
             <Stack.Navigator>
               <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="CreateProject" component={CreateProject} />
             </Stack.Navigator>
           ) : (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
