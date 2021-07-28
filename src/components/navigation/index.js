@@ -7,6 +7,7 @@ import Signin from "../screens/Signin";
 import Signup from "../screens/Signup";
 import Home from "../screens/Home";
 import CreateProject from "../screens/CreateProject";
+import AddTask from "../screens/AddTask";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ function Navigation() {
             <Stack.Navigator>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="CreateProject" component={CreateProject} />
+              <Stack.Screen name="AddTask" component={AddTask} />
             </Stack.Navigator>
           ) : (
             <Stack.Navigator screenOptions={{ headerShown: false }}>

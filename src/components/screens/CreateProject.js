@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { IconButton, Text, TextInput } from "react-native-paper";
+import { Caption, IconButton, Text, TextInput } from "react-native-paper";
 import { Context as ProjectContext } from "../../providers/ProjectContext";
 import { Context as AuthContext } from "../../providers/AuthContext";
 import theme from "../../theme";
@@ -10,10 +10,13 @@ function CreateProject({ navigation }) {
   const { state } = useContext(AuthContext);
   const [projectName, setProjectName] = useState("");
   const [timestamp, setTimestamp] = useState(Date.now());
+  const [projectNameError, setProjectNameError] = useState(false);
 
   function handleSave() {
     if (projectName) {
       createProject(projectName, timestamp, state.user.id);
+    } else {
+      if (!projectName) setProjectNameError(true);
     }
   }
 
@@ -36,6 +39,7 @@ function CreateProject({ navigation }) {
         value={projectName}
         onChangeText={setProjectName}
       />
+      {projectNameError && <Caption>Project name is required!</Caption>}
     </View>
   );
 }
