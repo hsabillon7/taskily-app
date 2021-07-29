@@ -66,6 +66,26 @@ const setCurrentProject = (dispatch) => (project) => {
   dispatch({ type: "setCurrentProject", payload: project });
 };
 
+// Agregar una tarea a un proyecto
+const addTask =
+  (dispatch) => (idProject, userId, name, description, timestamp) => {
+    projectsRef
+      .doc(idProject)
+      .update({
+        tasks: firebase.firestore.FieldValue.arrayUnion({
+          name,
+          description,
+          timestamp,
+        }),
+      })
+      .then(() => {
+        getProjects(userId);
+      })
+      .catch((error) => {
+        dispatch({ type: "errorMessage", payload: error.message });
+      });
+  };
+
 // Exportar las funcionalidades del contexto y el proveedor
 export const { Provider, Context } = createDataContext(
   projectReducer,
@@ -73,6 +93,7 @@ export const { Provider, Context } = createDataContext(
     createProject,
     getProjects,
     setCurrentProject,
+    addTask,
   },
   {
     errorMessage: null,
