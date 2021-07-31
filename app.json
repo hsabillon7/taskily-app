@@ -4,7 +4,7 @@
     "slug": "taskily-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Taskily-logo.png",
+    "icon": "./assets/Taskily-logo-square.png",
     "splash": {
       "image": "./assets/Taskily-logo.png",
       "resizeMode": "contain",
