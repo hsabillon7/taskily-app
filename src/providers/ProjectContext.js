@@ -12,6 +12,27 @@ const projectReducer = (state, action) => {
       return { ...state, projects: action.payload };
     case "setCurrentProject":
       return { ...state, currentProject: action.payload };
+    case "addTask":
+      return {
+        ...state,
+        currentProject: {
+          ...state.currentProject,
+          tasks: [...state.currentProject.tasks, action.payload],
+        },
+      };
+    case "updateTask":
+      return {
+        ...state,
+        currentProject: {
+          ...state.currentProject,
+          tasks: state.currentProject.tasks.map((task) => {
+            if (task.timestamp === action.payload.timestamp) {
+              return action.payload;
+            }
+            return task;
+          }),
+        },
+      };
     default:
       return state;
   }
@@ -21,11 +42,13 @@ const projectReducer = (state, action) => {
 const projectsRef = firebase.firestore().collection("projects");
 
 // Almacenar un nuevo proyecto para el usuario actual
-const createProject = (dispatch) => (title, timestamp, user) => {
+const createProject = (dispatch) => (title, description, timestamp, user) => {
   const data = {
     title,
+    description,
     timestamp,
     userId: user,
+    tasks: [],
   };
 
   projectsRef
@@ -67,24 +90,48 @@ const setCurrentProject = (dispatch) => (project) => {
 };
 
 // Agregar una tarea a un proyecto
-const addTask =
-  (dispatch) => (idProject, userId, name, description, timestamp) => {
-    projectsRef
-      .doc(idProject)
-      .update({
-        tasks: firebase.firestore.FieldValue.arrayUnion({
-          name,
-          description,
-          timestamp,
-        }),
-      })
-      .then(() => {
-        getProjects(userId);
-      })
-      .catch((error) => {
-        dispatch({ type: "errorMessage", payload: error.message });
+const addTask = (dispatch) => (idProject, name, description, timestamp) => {
+  projectsRef
+    .doc(idProject)
+    .update({
+      tasks: firebase.firestore.FieldValue.arrayUnion({
+        name,
+        description,
+        timestamp,
+        done: false,
+      }),
+    })
+    .then(() => {
+      dispatch({
+        type: "addTask",
+        payload: { name, description, done: false, timestamp },
       });
-  };
+    })
+    .catch((error) => {
+      dispatch({ type: "errorMessage", payload: error.message });
+    });
+};
+
+// Actualizar el estado de una tarea
+const udpateTaskStatus = (dispatch) => (project, task) => {
+  const tasks = project.tasks.map((aTask) => {
+    if (aTask.timestamp === task.timestamp) return task;
+    return aTask;
+  });
+
+  projectsRef
+    .doc(project.id)
+    .set(
+      { ...project, tasks: firebase.firestore.FieldValue.arrayUnion(...tasks) },
+      { merge: false }
+    )
+    .then(() => {
+      dispatch({ type: "updateTask", payload: task });
+    })
+    .catch((error) => {
+      dispatch({ type: "errorMessage", payload: error.message });
+    });
+};
 
 // Exportar las funcionalidades del contexto y el proveedor
 export const { Provider, Context } = createDataContext(
@@ -94,6 +141,7 @@ export const { Provider, Context } = createDataContext(
     getProjects,
     setCurrentProject,
     addTask,
+    udpateTaskStatus,
   },
   {
     errorMessage: null,

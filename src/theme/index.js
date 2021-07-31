@@ -13,6 +13,7 @@ const theme = {
     orange: "#ff7746",
     gray: "#c6d5ff",
     gray200: "#95b1ff",
+    backgroundLogo: "#FBFBFB",
 
     // Brand colors
     /* 

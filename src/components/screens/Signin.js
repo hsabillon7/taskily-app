@@ -3,10 +3,12 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 import SigninForm from "../forms/SigninForm";
 import theme from "../../theme";
+import TaskilyLogo from "../shared/TaskilyLogo";
 
 function Signin({ navigation }) {
   return (
     <View style={styles.container}>
+      <TaskilyLogo />
       <SigninForm />
       <Text style={styles.forgotPassword}>Forgot your password?</Text>
       <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 10,
-    backgroundColor: theme.colors.backgroundWhite,
+    backgroundColor: theme.colors.backgroundLogo,
   },
   forgotPassword: {
     textAlign: "auto",

@@ -23,13 +23,15 @@ function ProjectList({ projects, navigation }) {
       <FlatList
         data={projects}
         ListEmptyComponent={emptyFlatList}
-        numColumns={2}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <>
             <TouchableOpacity onPress={() => handleSelectProject(item)}>
               <Project
                 id={item.id}
                 title={item.title}
+                description={item.description}
+                tasks={item.tasks}
                 timestamp={item.timestamp}
               />
             </TouchableOpacity>

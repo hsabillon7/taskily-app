@@ -31,9 +31,21 @@ function Navigation() {
         <>
           {state.loggedIn ? (
             <Stack.Navigator>
-              <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="CreateProject" component={CreateProject} />
-              <Stack.Screen name="AddTask" component={AddTask} />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="CreateProject"
+                component={CreateProject}
+                options={{ headerTitle: "Create a project" }}
+              />
+              <Stack.Screen
+                name="AddTask"
+                component={AddTask}
+                options={{ headerTitle: "" }}
+              />
             </Stack.Navigator>
           ) : (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
